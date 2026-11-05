@@ -73,3 +73,17 @@ test("cross-site mutation origin rejected", () => {
   assert.equal(sameOrigin(mock("https://evil.example.com")), false);
   assert.equal(sameOrigin(mock(null)), false);
 });
+
+
+test("analysis routes are read/submit only and cannot escalate", () => {
+  assert.equal(allowedPath("GET", ["conversations",id,"analysis-jobs"]),
+    "/conversations/"+id+"/analysis-jobs");
+  assert.equal(allowedPath("POST", ["conversations",id,"analysis-jobs"]),
+    "/conversations/"+id+"/analysis-jobs");
+  assert.equal(allowedPath("GET", ["analysis-jobs",id]), "/analysis-jobs/"+id);
+  assert.equal(allowedPath("POST", ["analysis-jobs",id]), null);
+  assert.equal(allowedPath("PATCH", ["analysis-jobs",id]), null);
+  assert.equal(allowedPath("DELETE", ["analysis-jobs",id]), null);
+  assert.equal(allowedPath("POST", ["analysis-jobs",id,"run"]), null);
+  assert.equal(allowedPath("POST", ["conversations",id,"approve"]), null);
+});

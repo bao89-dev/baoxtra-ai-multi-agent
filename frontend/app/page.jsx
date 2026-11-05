@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
+import AnalysisPanel from "./analysis-panel";
 
 const call = async (path, options = {}) => {
   const res = await fetch(path, { credentials: "same-origin", cache: "no-store", ...options });
@@ -222,6 +223,7 @@ export default function Home() {
                 <span>{(a.byte_size / 1024).toFixed(1)} KB</span><small>{a.processing_status}</small>
               </article>)}
               {!attachments.length && <p>Chưa có tệp nào.</p>}
+              <AnalysisPanel conversationId={current} attachments={attachments} />
             </div> : <div className="contentPanel">
               <h3>Sơ đồ & kế hoạch / Architecture & Plan</h3>
               <div className="placeholderDiagram"><span>Yêu cầu</span><b>↓</b><span>AI Architecture</span><b>↓</b><span>Task DAG</span><b>↓</b><span>Phê duyệt của Owner</span></div>

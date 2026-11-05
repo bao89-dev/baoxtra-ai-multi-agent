@@ -108,7 +108,7 @@ def get_existing(db, task_id):
 
 def make_app():
     initialize()
-    app = FastAPI(title="BaoXTra Agency Control API", version="0.4.0")
+    app = FastAPI(title="BaoXTra Agency Control API", version="0.5.0")
     origins = [x.strip() for x in os.getenv("AGENCY_CORS_ORIGINS", "").split(",") if x.strip()]
     if origins:
         app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=False, allow_methods=["GET","POST","PATCH"], allow_headers=["Authorization","Content-Type"])
@@ -175,6 +175,8 @@ def make_app():
                        (evidence_id,task_id,ev.command,ev.exit_code,ev.log_url,ev.artifact_sha256,ev.commit_sha,ev.environment,None,"UNVERIFIED_SUBMISSION",now()))
             audit(db, task_id, "EVIDENCE_SUBMITTED", {"evidence_id": evidence_id, "environment": ev.environment})
         return {"id": evidence_id, "verification": "UNVERIFIED_SUBMISSION", "status_changed": False}
+    from agency.workspace_api import register_workspace
+    register_workspace(app, database, auth, now)
     return app
 
 app = make_app()

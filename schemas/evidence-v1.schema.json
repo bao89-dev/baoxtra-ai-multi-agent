@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Evidence V1",
+  "type": "object",
+  "required": [
+    "task_id",
+    "target_repo",
+    "commit_sha",
+    "result",
+    "exit_code",
+    "log_path",
+    "log_sha256",
+    "provenance"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string"
+    },
+    "target_repo": {
+      "type": "string"
+    },
+    "commit_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{40}$"
+    },
+    "result": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ]
+    },
+    "exit_code": {
+      "type": "integer"
+    },
+    "log_path": {
+      "type": "string"
+    },
+    "log_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "provenance": {
+      "enum": [
+        "LOCAL_UNTRUSTED",
+        "GITHUB_ACTIONS_VERIFIED"
+      ]
+    },
+    "ci_run_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

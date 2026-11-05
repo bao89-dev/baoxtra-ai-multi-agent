@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Handoff V1",
+  "type": "object",
+  "required": [
+    "task_id",
+    "commit_sha",
+    "verifier_status",
+    "release_gate"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string"
+    },
+    "commit_sha": {
+      "type": "string"
+    },
+    "verifier_status": {
+      "enum": [
+        "BLOCKED",
+        "REVIEW_REQUIRED"
+      ]
+    },
+    "release_gate": {
+      "const": "HUMAN_APPROVAL_REQUIRED"
+    }
+  }
+}

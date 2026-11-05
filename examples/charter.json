@@ -1,0 +1,32 @@
+{
+  "project_title": "BaoXTra Trading parser safety",
+  "owner": "BaoXTra AI Lab",
+  "target_repo": "bao89-dev/bao-ai-trading",
+  "objective": "Validate JSON/pipe signals strictly in REVIEW_ONLY",
+  "acceptance_criteria": [
+    "Valid JSON accepted",
+    "Invalid live mode rejected",
+    "No execution side effects"
+  ],
+  "tasks": [
+    {
+      "id": "T1",
+      "depends_on": [],
+      "title": "Design parser contract"
+    },
+    {
+      "id": "T2",
+      "depends_on": [
+        "T1"
+      ],
+      "title": "Write tests"
+    },
+    {
+      "id": "T3",
+      "depends_on": [
+        "T2"
+      ],
+      "title": "Run trusted CI"
+    }
+  ]
+}

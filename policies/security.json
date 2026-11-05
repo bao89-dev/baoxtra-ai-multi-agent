@@ -1,0 +1,22 @@
+{
+  "allowed_modes": [
+    "REVIEW_ONLY",
+    "PAPER"
+  ],
+  "forbidden_actions": [
+    "trade_live",
+    "withdraw",
+    "send_order",
+    "auto_merge",
+    "deploy_production",
+    "write_secrets"
+  ],
+  "human_approval_required_for": [
+    "merge",
+    "release",
+    "repository_write",
+    "broker_api"
+  ],
+  "trusted_ci_required": true,
+  "separation_of_duties": true
+}

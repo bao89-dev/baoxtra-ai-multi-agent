@@ -1,0 +1,12 @@
+{
+  "task_id": "T3",
+  "title": "Parser regression",
+  "target_repo": "bao89-dev/bao-ai-trading",
+  "mode": "REVIEW_ONLY",
+  "acceptance_criteria": [
+    "Valid JSON accepted",
+    "Invalid live mode rejected"
+  ],
+  "criterion_results": [],
+  "evidence": null
+}

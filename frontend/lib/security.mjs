@@ -53,9 +53,13 @@ export function allowedPath(method, parts) {
   if (parts.length === 1 && parts[0] === "summary" && method === "GET") return "/summary";
   if (parts.length === 1 && parts[0] === "tasks" && method === "GET") return "/tasks";
   if (parts.length === 1 && parts[0] === "conversations" && ["GET","POST"].includes(method)) return "/conversations";
+  if (parts[0] === "analysis-jobs" && parts.length === 2 && UUID.test(parts[1] || "") && method === "GET")
+    return "/analysis-jobs/" + parts[1];
   if (parts[0] !== "conversations" || !UUID.test(parts[1] || "")) return null;
   if (parts.length === 3 && ["messages","attachments"].includes(parts[2]) &&
       ["GET","POST"].includes(method)) return "/conversations/" + parts[1] + "/" + parts[2];
+  if (parts.length === 3 && parts[2] === "analysis-jobs" &&
+      ["GET","POST"].includes(method)) return "/conversations/" + parts[1] + "/analysis-jobs";
   if (parts.length === 3 && parts[2] === "events" && method === "GET") return "/conversations/" + parts[1] + "/events";
   return null;
 }

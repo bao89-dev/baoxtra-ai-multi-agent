@@ -1,0 +1,14 @@
+{
+  "task_id": "BX-TEST-001",
+  "target_repo": "bao89-dev/baoxtra-ai-multi-agent",
+  "base_sha": "b9f97d8ff214d4d6757d9396ec3ad6dec3be5090",
+  "branch": "feat/sample-doc-review",
+  "mode": "REVIEW_ONLY",
+  "changes": [
+    {
+      "path": "docs/ROADMAP.md",
+      "operation": "modify",
+      "description": "Clarify future E2E verification requirements"
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 # BaoXTra AI Multi-Agent
 
-Security-first **software development agency starter V0.1**. This is a working **offline contract validator**, not a completed autonomous coding agency.
+Security-first **AI Software Agency starter V0.2**. This repository contains
+a working Python orchestration/validation skeleton and GitHub CI metadata
+verifier, **not yet autonomous coding agents**.
 
-Owner → Council charter gate → PM task DAG → Developer (planned) → GitHub CI → Evidence Store (planned) → Independent Verifier (local checks) → Handoff (planned).
-
-## Run tests
+## Run locally
 
 ```bash
 python -m unittest discover -s tests -v
@@ -12,21 +12,33 @@ python -m agency.cli plan --input examples/charter.json --output out/plan.json
 python -m agency.cli verify --input examples/task.json --output out/verification.json
 ```
 
-## Implemented
+## Verify GitHub CI metadata
 
-- Charter validation; task graph cycle and unknown-dependency detection.
-- Evidence manifest using SHA-256, source/exit checks and fail-closed independent review.
-- GitHub Actions unit tests with uploaded test output artifact.
-- 14 unit tests cover positive and rejection cases.
+```bash
+python -m agency.cli verify-ci --repo bao89-dev/baoxtra-ai-multi-agent \
+  --commit <FULL_SHA> --run-id <RUN_ID> --output out/ci-verification.json
+```
 
-## NOT implemented
+For private repositories, use an Actions: Read token through the
+`GITHUB_TOKEN` environment variable; never commit credentials.
 
-- LLM-backed Council/Developer/Tester agents; real code authoring, GitHub PR automation.
-- Independently authenticated GitHub CI provenance; durable evidence store and audit log.
-- Production release pipeline, live trading, automatic merges.
+### Implemented
 
-## Safety
+- Project Charter gate, cycle-safe DAG planner, local evidence SHA-256 manifest.
+- Fail-closed review stage and policy forbidding LIVE / auto merge.
+- GitHub Actions unit tests plus attached log artifact.
+- Read-only GitHub API metadata checks for workflow/job/artifact identities,
+  exact commit SHA, completion and success, artifact presence.
+- Negative-case unit tests and a CLI command for metadata verification.
 
-Modes limited to REVIEW_ONLY and PAPER. Any LIVE, broker execution, withdrawal or auto-merge is disallowed. No approval is granted by local evidence alone. Human approval required for releases. CI green is not equivalent to verified E2E.
+### Still blocked / NOT_IMPLEMENTED
 
-See docs/ARCHITECTURE.md and docs/ROADMAP.md. Always review CI checks and logs against the exact commit SHA before merging.
+- AI Council and Developer/Tester with real LLM and coding execution.
+- Artifact **content** authentication, workflow integrity attestation and
+  independent cross-environment E2E verification.
+- Persistent Evidence Store, independent verifier service, release/handoff
+  automation, Work 200 live integration and MT5 tests.
+
+**Do not interpret CI_METADATA_VERIFIED as a complete software acceptance.**
+No live brokerage orders, auto-merge or deployment are enabled. Human review
+remains mandatory. See [docs/VERIFICATION_V0_2.md](docs/VERIFICATION_V0_2.md).

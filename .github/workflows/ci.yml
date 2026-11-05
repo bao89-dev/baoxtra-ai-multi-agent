@@ -29,3 +29,23 @@ jobs:
           name: unit-test-log
           path: out/test-output.txt
           retention-days: 30
+
+  frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install frontend dependencies
+        run: npm install --no-audit --no-fund
+      - name: Frontend contract tests
+        run: npm test
+      - name: Next.js build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: npm run build

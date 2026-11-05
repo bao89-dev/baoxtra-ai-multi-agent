@@ -99,8 +99,8 @@ def register_workspace(app, database, auth, now):
         await file.close()
         if not data or len(data) > limit:
             raise HTTPException(413, "Empty or oversized media")
-        valid = ((mime == "image/png" and data.startswith(b"\\x89PNG\\r\\n\\x1a\\n"))
-                 or (mime == "image/jpeg" and data.startswith(b"\\xff\\xd8\\xff"))
+        valid = ((mime == "image/png" and data.startswith(b"\x89PNG\r\n\x1a\n"))
+                 or (mime == "image/jpeg" and data.startswith(b"\xff\xd8\xff"))
                  or (mime == "video/mp4" and len(data) > 12 and data[4:8] == b"ftyp"))
         if not valid:
             raise HTTPException(415, "File signature mismatch")
@@ -157,10 +157,10 @@ def register_workspace(app, database, auth, now):
                     rows = db.execute("SELECT id,event_type,payload FROM conversation_events WHERE conversation_id=? AND id>? ORDER BY id LIMIT 100", (cid,cursor)).fetchall()
                 for row in rows:
                     cursor = row["id"]
-                    yield "id: " + str(cursor) + "\\nevent: " + row["event_type"] + "\\ndata: " + row["payload"] + "\\n\\n"
+                    yield "id: " + str(cursor) + "\nevent: " + row["event_type"] + "\ndata: " + row["payload"] + "\n\n"
                 if once:
                     return
-                yield ": heartbeat\\n\\n"
+                yield ": heartbeat\n\n"
                 await asyncio.sleep(1)
         return StreamingResponse(stream(), media_type="text/event-stream", headers={"Cache-Control":"no-cache","X-Accel-Buffering":"no"})
 

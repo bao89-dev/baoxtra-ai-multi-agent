@@ -52,7 +52,7 @@ class WorkspaceTests(unittest.TestCase):
 
     def test_image_quarantined_and_bound(self):
         cid=self.new_chat()
-        png=b"\\x89PNG\\r\\n\\x1a\\n"+b"example-payload"
+        png=b"\x89PNG\r\n\x1a\n"+b"example-payload"
         r=self.client.post(f"/api/v1/conversations/{cid}/attachments",headers=self.headers,files={"file":("test.png",png,"image/png")})
         self.assertEqual(r.status_code,201,r.text)
         self.assertEqual(r.json()["status"],"QUARANTINED_NOT_SCANNED")
@@ -70,7 +70,7 @@ class WorkspaceTests(unittest.TestCase):
     def test_invalid_cross_conversation_attachment(self):
         cid1=self.new_chat()
         cid2=self.new_chat()
-        png=b"\\x89PNG\\r\\n\\x1a\\n"+b"payload"
+        png=b"\x89PNG\r\n\x1a\n"+b"payload"
         a=self.client.post(f"/api/v1/conversations/{cid1}/attachments",headers=self.headers,files={"file":("x.png",png,"image/png")})
         self.assertEqual(a.status_code,201,a.text)
         r=self.client.post(f"/api/v1/conversations/{cid2}/messages",headers=self.headers,json={"text":"Steal","attachment_ids":[a.json()["id"]]})
@@ -78,7 +78,7 @@ class WorkspaceTests(unittest.TestCase):
 
     def test_mp4_quarantined_not_processed(self):
         cid=self.new_chat()
-        mp4=b"\\x00\\x00\\x00\\x18ftypisom"+b"fake video content"
+        mp4=b"\x00\x00\x00\x18ftypisom"+b"fake video content"
         r=self.client.post(f"/api/v1/conversations/{cid}/attachments",headers=self.headers,files={"file":("clip.mp4",mp4,"video/mp4")})
         self.assertEqual(r.status_code,201,r.text)
         self.assertEqual(r.json()["analysis"],"NOT_RUN")

@@ -53,9 +53,20 @@ export function allowedPath(method, parts) {
   if (parts.length === 1 && parts[0] === "summary" && method === "GET") return "/summary";
   if (parts.length === 1 && parts[0] === "tasks" && method === "GET") return "/tasks";
   if (parts.length === 1 && parts[0] === "conversations" && ["GET","POST"].includes(method)) return "/conversations";
+  if (parts.length === 1 && parts[0] === "proposals" && method === "POST") return "/proposals";
+  if (parts[0] === "proposals" && UUID.test(parts[1] || "")) {
+    if (parts.length === 2 && method === "GET") return "/proposals/" + parts[1];
+    if (parts.length === 3 && parts[2] === "revisions" && method === "POST")
+      return "/proposals/" + parts[1] + "/revisions";
+    if (parts.length === 3 && parts[2] === "decision" && method === "POST")
+      return "/proposals/" + parts[1] + "/decision";
+    return null;
+  }
   if (parts[0] === "analysis-jobs" && parts.length === 2 && UUID.test(parts[1] || "") && method === "GET")
     return "/analysis-jobs/" + parts[1];
   if (parts[0] !== "conversations" || !UUID.test(parts[1] || "")) return null;
+  if (parts.length === 3 && parts[2] === "proposals" && method === "GET")
+    return "/conversations/" + parts[1] + "/proposals";
   if (parts.length === 3 && ["messages","attachments"].includes(parts[2]) &&
       ["GET","POST"].includes(method)) return "/conversations/" + parts[1] + "/" + parts[2];
   if (parts.length === 3 && parts[2] === "analysis-jobs" &&

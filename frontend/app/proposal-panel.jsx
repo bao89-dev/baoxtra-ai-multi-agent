@@ -32,6 +32,14 @@ export default function ProposalPanel({conversationId}) {
 
   useEffect(()=>{setSelected("");setItems([]);refresh().catch(e=>setError(e.message));},[refresh]);
   const current=items.find(x=>x.id===selected);
+  let dirty=Boolean(current && (
+    title!==current.content.title || summary!==current.content.summary ||
+    diagram!==current.content.diagram
+  ));
+  if(current) {
+    try { dirty ||= JSON.stringify(JSON.parse(tasks)) !== JSON.stringify(current.content.tasks); }
+    catch { dirty=true; }
+  }
   function load(item) {
     setSelected(item.id);setTitle(item.content.title);
     setSummary(item.content.summary);setDiagram(item.content.diagram);
@@ -87,15 +95,15 @@ export default function ProposalPanel({conversationId}) {
       {current?"Lưu thành phiên bản mới / New revision":"Tạo bản nháp / Create draft"}
     </button>
     {current&&<div className="approvalActions">
-      <p className="muted">Các nút chỉ quyết định bản đã lưu. Nếu bạn sửa nội dung phía trên, cần lưu phiên bản mới trước.</p>
+      <p className="muted">Các nút chỉ quyết định bản đã lưu. Nếu bạn sửa nội dung phía trên, phải lưu phiên bản mới trước khi có thể duyệt.</p>
       <label htmlFor="proposal-reason">Lý do quyết định</label>
       <textarea id="proposal-reason" rows={2} minLength={3} maxLength={2000} value={reason} onChange={e=>setReason(e.target.value)}/>
       <div className="decisionRow">
-        <button disabled={busy||current.status!=="DRAFT"||reason.trim().length<3}
+        <button disabled={busy||dirty||current.status!=="DRAFT"||reason.trim().length<3}
           onClick={()=>decide("APPROVE")}>Duyệt V{current.version}</button>
-        <button disabled={busy||current.status!=="DRAFT"||reason.trim().length<3}
+        <button disabled={busy||dirty||current.status!=="DRAFT"||reason.trim().length<3}
           onClick={()=>decide("REQUEST_CHANGES")}>Yêu cầu sửa</button>
-        <button disabled={busy||current.status!=="DRAFT"||reason.trim().length<3}
+        <button disabled={busy||dirty||current.status!=="DRAFT"||reason.trim().length<3}
           onClick={()=>decide("REJECT")}>Từ chối</button>
       </div>
     </div>}

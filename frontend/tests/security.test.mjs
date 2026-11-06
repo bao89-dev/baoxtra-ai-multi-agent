@@ -87,3 +87,23 @@ test("analysis routes are read/submit only and cannot escalate", () => {
   assert.equal(allowedPath("POST", ["analysis-jobs",id,"run"]), null);
   assert.equal(allowedPath("POST", ["conversations",id,"approve"]), null);
 });
+
+
+test("proposal review routes are tightly allowlisted", () => {
+  assert.equal(allowedPath("POST", ["proposals"]), "/proposals");
+  assert.equal(allowedPath("GET", ["conversations",id,"proposals"]),
+    "/conversations/"+id+"/proposals");
+  assert.equal(allowedPath("GET", ["proposals",id]), "/proposals/"+id);
+  assert.equal(allowedPath("POST", ["proposals",id,"revisions"]),
+    "/proposals/"+id+"/revisions");
+  assert.equal(allowedPath("POST", ["proposals",id,"decision"]),
+    "/proposals/"+id+"/decision");
+  for(const [method,parts] of [
+    ["POST",["proposals",id,"execute"]],
+    ["PATCH",["proposals",id]],
+    ["DELETE",["proposals",id]],
+    ["GET",["proposals",id,"decision"]],
+    ["POST",["proposals","../../main","decision"]],
+    ["POST",["trading","live"]]
+  ]) assert.equal(allowedPath(method,parts),null);
+});

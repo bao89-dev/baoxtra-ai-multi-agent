@@ -17,6 +17,12 @@ async function proxy(req, { params }) {
   try { target = backendURL(path, new URL(req.url).searchParams); }
   catch { return NextResponse.json({ error: "Backend config invalid" }, { status: 503 }); }
   const headers = { Authorization: "Bearer " + process.env.AGENCY_API_TOKEN };
+  if (path.endsWith("/decision") && req.method === "POST") {
+    const ownerKey = process.env.AGENCY_APPROVAL_TOKEN || "";
+    if (ownerKey.length < 32 || ownerKey === process.env.AGENCY_API_TOKEN)
+      return NextResponse.json({ error: "Separate owner approval key not configured" }, { status: 503 });
+    headers["X-Owner-Approval-Key"] = ownerKey;
+  }
   const init = { method: req.method, headers, cache: "no-store", signal: req.signal };
   if (req.method === "POST") {
     if (path.endsWith("/attachments")) {

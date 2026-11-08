@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import AnalysisPanel from "./analysis-panel";
+import ProposalPanel from "./proposal-panel";
 
 const call = async (path, options = {}) => {
   const res = await fetch(path, { credentials: "same-origin", cache: "no-store", ...options });
@@ -225,9 +226,7 @@ export default function Home() {
               {!attachments.length && <p>Chưa có tệp nào.</p>}
               <AnalysisPanel conversationId={current} attachments={attachments} />
             </div> : <div className="contentPanel">
-              <h3>Sơ đồ & kế hoạch / Architecture & Plan</h3>
-              <div className="placeholderDiagram"><span>Yêu cầu</span><b>↓</b><span>AI Architecture</span><b>↓</b><span>Task DAG</span><b>↓</b><span>Phê duyệt của Owner</span></div>
-              <p className="muted">Đây là khung hiển thị dự kiến, chưa có Agent thiết kế hoặc nút phê duyệt thật.</p>
+              <ProposalPanel conversationId={current} />
             </div>}
           </>}
           {error && <div className="errorBanner" role="alert">{error}<button onClick={() => setError("")} aria-label="Đóng thông báo">×</button></div>}

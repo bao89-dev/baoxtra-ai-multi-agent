@@ -1,0 +1,34 @@
+name: Work200 PR dependency audit
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/audit_pr_chain.py'
+      - 'tests/test_pr_chain_audit.py'
+      - '.github/workflows/work200-pr-chain-audit.yml'
+permissions:
+  contents: read
+  pull-requests: read
+jobs:
+  pr-chain-metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test fail-closed metadata validator
+        run: python -m unittest discover -s tests -p 'test_pr_chain_audit.py' -v
+      - name: Audit live GitHub PR metadata
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python -m scripts.audit_pr_chain
+      - name: Save scoped evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: work200-pr-chain-metadata
+          path: out/pr-chain-audit.json
+          if-no-files-found: warn
+          retention-days: 30
